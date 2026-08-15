@@ -1,4 +1,5 @@
 import os
+import sqlite3
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import threading
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -42,21 +43,49 @@ GCP_MESSAGE_TEXT = f"""<code>{GCP_SERVER_LINK}</code>
 • <b>Server: SGP</b> ❞
 • <b>BY : @KingsNet_Free</b> ❞"""
 
+# --- إعداد قاعدة البيانات الدائمة ---
+DB_NAME = "bot_data.db"
+
+def init_db():
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS users (
+            user_id INTEGER PRIMARY KEY
+        )
+    ''')
+    conn.commit()
+    conn.close()
+
+init_db()
+
 def save_and_count_user(user_id):
-    filename = "users.txt"
-    if not os.path.exists(filename):
-        open(filename, "w").close()
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
     
-    with open(filename, "r") as f:
-        users = set(f.read().splitlines())
+    # معرفة العدد الإجمالي حالياً
+    cursor.execute("SELECT COUNT(*) FROM users")
+    total_users = cursor.fetchone()[0]
+
+    # عدم حساب/حفظ الآدمن كعضو جديد
+    if user_id == ADMIN_ID:
+        conn.close()
+        return False, total_users
+
+    # التأكد إذا كان المستخدم موجوداً مسبقاً
+    cursor.execute("SELECT user_id FROM users WHERE user_id = ?", (user_id,))
+    exists = cursor.fetchone()
     
-    is_new = str(user_id) not in users
-    if is_new:
-        with open(filename, "a") as f:
-            f.write(f"{user_id}\n")
-        users.add(str(user_id))
-        
-    return is_new, len(users)
+    if not exists:
+        cursor.execute("INSERT INTO users (user_id) VALUES (?)", (user_id,))
+        conn.commit()
+        total_users += 1
+        is_new = True
+    else:
+        is_new = False
+
+    conn.close()
+    return is_new, total_users
 
 async def check_all_subscriptions(user_id, context):
     for channel in REQUIRED_CHANNELS:
@@ -72,7 +101,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user = update.effective_user
     is_new, total_users = save_and_count_user(user.id)
     
-    if is_new and ADMIN_ID:
+    if is_new and user.id != ADMIN_ID:
         username = f"@{user.username}" if user.username else "لا يوجد"
         lang = user.language_code if user.language_code else "غير معروفة"
         
