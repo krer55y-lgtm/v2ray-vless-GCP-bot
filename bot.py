@@ -21,7 +21,7 @@ def keep_alive():
 keep_alive()
 # ------------------------------------
 
-TOKEN = "8213423103:AAGOroWULpNQeUaXwJQDnvTkmaleBzKJTP0"
+TOKEN = "8213423103:AAG8IwsqQK4TcxsNOsNrguxPufd6yx03PZk"
 ADMIN_ID = 5577104159 
 
 # قائمة القنوات المطلوبة
