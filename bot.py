@@ -1,4 +1,25 @@
+import os
+from http.server import HTTPServer, BaseHTTPRequestHandler
+import threading
 import logging
+
+# --- سيرفر وهمي لإبقاء البوت شغالاً على Render ---
+class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Bot is alive!")
+
+def keep_alive():
+    port = int(os.environ.get("PORT", 8080))
+    server = HTTPServer(('0.0.0.0', port), SimpleHTTPRequestHandler)
+    t = threading.Thread(target=server.serve_forever)
+    t.daemon = True
+    t.start()
+
+keep_alive()
+# ----------------------------------------------
+
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 
@@ -20,8 +41,8 @@ VLESS_SERVERS = {
     }
 }
 
-# تم ترك القيمة فارغة لتضع كود Google Cloud هنا لاحقاً
-GCP_CODE = ""
+# تم وضع كود Google Cloud (GCP) هنا
+GCP_CODE = "vless://abcd2026-1337-4ace-8bad-deadfacebeef@karrar-pro-356943029801.us-central1.run.app:443?path=%2FTelegram%2F%40KingsNet_Free%2F%40H_G_5W&security=tls&encryption=none&host=karrar-pro-356943029801.us-central1.run.app&type=ws&sni=karrar-pro-356943029801.us-central1.run.app#GCP%20Google%20Cloud%20%7C%20BY%20Karrar"
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     keyboard = [
