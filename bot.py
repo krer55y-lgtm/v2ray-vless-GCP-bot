@@ -34,15 +34,13 @@ VLESS_SERVERS = {
 
 GCP_SERVER_LINK = "vless://abcd2026-1337-4ace-8bad-deadfacebeef@karrar-pro-126684378972.us-central1.run.app:443?path=%2FTelegram%2F%40KingsNet_Free%2F%40H_G_5W&security=tls&encryption=none&host=karrar-pro-126684378972.us-central1.run.app&type=ws&sni=karrar-pro-126684378972.us-central1.run.app#%F0%9D%91%A0%A9%F0%9D%92%80%20%40H_G_5W"
 
-GCP_MESSAGE_TEXT = (
-    f"```javascript\n"
-    f"{GCP_SERVER_LINK}\n"
-    f"```\n\n"
-    f"• **Google Cloud** format\n"
-    f"• **Duration : 4 : 30** format\n"
-    f"• **Server: USA** format\n"
-    f"• **BY : @KingsNet_Free** format"
-)
+# نص رسالة GCP بتنسيق HTML آمن
+GCP_MESSAGE_TEXT = f"""<code>{GCP_SERVER_LINK}</code>
+
+• <b>Google Cloud</b> ❞
+• <b>Duration : 4 : 30</b> ❞
+• <b>Server: USA</b> ❞
+• <b>BY : @KingsNet_Free</b> ❞"""
 
 def save_and_count_user(user_id):
     filename = "users.txt"
@@ -94,8 +92,8 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if not await check_all_subscriptions(user.id, context):
         keyboard = [
-            [InlineKeyboardButton("📢 القناة الأولى", url="[https://t.me/KingsNet_Free](https://t.me/KingsNet_Free)")],
-            [InlineKeyboardButton("📢 القناة الثانية", url="[https://t.me/Free_Net_Arab](https://t.me/Free_Net_Arab)")],
+            [InlineKeyboardButton("📢 القناة الأولى", url="https://t.me/KingsNet_Free")],
+            [InlineKeyboardButton("📢 القناة الثانية", url="https://t.me/Free_Net_Arab")],
             [InlineKeyboardButton("✅ تحقّق من الاشتراك", callback_data='check_sub')]
         ]
         await update.message.reply_text(
@@ -133,7 +131,7 @@ async def button_click(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await query.message.reply_text(f"كود {VLESS_SERVERS[query.data]['name']}:\n\n<code>{VLESS_SERVERS[query.data]['code']}</code>", parse_mode='HTML')
     
     elif query.data == 'get_gcp':
-        await query.message.reply_text(GCP_MESSAGE_TEXT, parse_mode='Markdown')
+        await query.message.reply_text(GCP_MESSAGE_TEXT, parse_mode='HTML')
         
     elif query.data == 'main_menu':
         keyboard = [[InlineKeyboardButton("سيرفرات VLESS 🚀", callback_data='vless_menu')], [InlineKeyboardButton("سيرفر Google Cloud (GCP) ☁️", callback_data='get_gcp')]]
