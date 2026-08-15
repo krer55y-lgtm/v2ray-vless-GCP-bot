@@ -38,7 +38,7 @@ GCP_SERVER_LINK = "vless://abcd2026-1337-4ace-8bad-deadfacebeef@karrar-pro-48209
 GCP_MESSAGE_TEXT = f"""<code>{GCP_SERVER_LINK}</code>
 
 • <b>Google Cloud</b> ❞
-• <b>Duration : 4 : 30</b> ❞
+• <b>Duration : 3 : 00</b> ❞
 • <b>Server: USA</b> ❞
 • <b>BY : @KingsNet_Free</b> ❞"""
 
