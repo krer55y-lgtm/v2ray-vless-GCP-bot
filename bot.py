@@ -39,7 +39,7 @@ GCP_MESSAGE_TEXT = f"""<code>{GCP_SERVER_LINK}</code>
 
 • <b>Google Cloud</b> ❞
 • <b>Duration : 3 : 00</b> ❞
-• <b>Server: USA</b> ❞
+• <b>Server: SGP</b> ❞
 • <b>BY : @KingsNet_Free</b> ❞"""
 
 def save_and_count_user(user_id):
