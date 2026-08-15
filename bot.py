@@ -2,6 +2,8 @@ import os
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import threading
 import logging
+from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
 
 # --- سيرفر وهمي لإبقاء البوت شغالاً على Render ---
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -20,12 +22,11 @@ def keep_alive():
 keep_alive()
 # ----------------------------------------------
 
-from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import ApplicationBuilder, CommandHandler, CallbackQueryHandler, ContextTypes
-
 TOKEN = "8213423103:AAGOroWULpNQeUaXwJQDnvTkmaleBzKJTP0"
 
-# قائمة السيرفرات بالأكواد المعدلة الجديدة
+# ID الحساب الخاص بك لاستلام الإشعارات
+ADMIN_ID = 5577104159 
+
 VLESS_SERVERS = {
     "vless_1": {
         "name": "سيرفر VLESS الأول 🚀",
@@ -41,10 +42,47 @@ VLESS_SERVERS = {
     }
 }
 
-# تم وضع كود Google Cloud (GCP) هنا
 GCP_CODE = "vless://abcd2026-1337-4ace-8bad-deadfacebeef@karrar-pro-356943029801.us-central1.run.app:443?path=%2FTelegram%2F%40KingsNet_Free%2F%40H_G_5W&security=tls&encryption=none&host=karrar-pro-356943029801.us-central1.run.app&type=ws&sni=karrar-pro-356943029801.us-central1.run.app#GCP%20Google%20Cloud%20%7C%20BY%20Karrar"
 
+def save_and_count_user(user_id):
+    filename = "users.txt"
+    if not os.path.exists(filename):
+        open(filename, "w").close()
+    
+    with open(filename, "r") as f:
+        users = set(f.read().splitlines())
+    
+    is_new = str(user_id) not in users
+    if is_new:
+        with open(filename, "a") as f:
+            f.write(f"{user_id}\n")
+        users.add(str(user_id))
+        
+    return is_new, len(users)
+
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user = update.effective_user
+    is_new, total_users = save_and_count_user(user.id)
+    
+    # إرسال الإشعار بحسابك الشخصي بنفس التصميم المطلوب
+    if is_new and ADMIN_ID:
+        username = f"@{user.username}" if user.username else "لا يوجد"
+        lang = user.language_code if user.language_code else "غير معروفة"
+        
+        admin_text = (
+            "👾 <b>شخص جديد دخل البوت</b>\n\n"
+            "👤 <b>معلومات العضو الجديد:</b>\n"
+            f"• <b>الاسم:</b> {user.full_name}\n"
+            f"• <b>المعرف:</b> {username}\n"
+            f"• <b>الآيدي:</b> <code>{user.id}</code>\n"
+            f"• 🌐 <b>اللغة:</b> {lang}\n\n"
+            f"📊 <b>إجمالي المستخدمين: {total_users}</b>"
+        )
+        try:
+            await context.bot.send_message(chat_id=ADMIN_ID, text=admin_text, parse_mode='HTML')
+        except Exception as e:
+            print(f"Failed to send admin notification: {e}")
+
     keyboard = [
         [InlineKeyboardButton("سيرفرات VLESS 🚀", callback_data='vless_menu')],
         [InlineKeyboardButton("سيرفر Google Cloud (GCP) ☁️", callback_data='get_gcp')]
