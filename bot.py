@@ -40,7 +40,7 @@ GCP_MESSAGE_TEXT = f"""<code>{GCP_SERVER_LINK}</code>
 
 • <b>Google Cloud</b> ❞
 • <b>Duration : 3 : 00</b> ❞
-• <b>Server: SGP</b> ❞
+• <b>Server: Doha</b> ❞
 • <b>BY : @KingsNet_Free</b> ❞"""
 
 # --- إعداد قاعدة البيانات الدائمة ---
