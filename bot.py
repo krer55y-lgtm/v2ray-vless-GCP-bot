@@ -33,7 +33,7 @@ VLESS_SERVERS = {
     "vless_3": {"name": "سيرفر VLESS الثالث 🌐", "code": "vless://77777777-8a3e-6666-b6d1-a9c5f0e8b3a2@mfa.gov.ua:2087?path=%2F&security=tls&encryption=none&host=fx3l5i2wdfxln0.fx6hsv0.ccwu.cc&fp=chrome&type=ws&sni=fx3l5i2wdfxln0.fx6hsv0.ccwu.cc#%F0%9D%94%B9%F0%9D%95%90%20%3A-%20%F0%9D%95%82%F0%9D%94%B8%E2%84%9D%E2%84%9D%F0%9D%94%B8%E2%84%9D"}
 }
 
-GCP_SERVER_LINK = "vless://abcd2026-1337-4ace-8bad-deadfacebeef@karrar-pro-797844254652.me-central1.run.app:443?path=%2FTelegram%2F%40KingsNet_Free%2F%40H_G_5W&security=tls&encryption=none&host=karrar-pro-797844254652.me-central1.run.app&type=ws&sni=karrar-pro-797844254652.me-central1.run.app#GCP%20Google%20Cloud%20%7C%20BY%20Karrar"
+GCP_SERVER_LINK = "vless://abcd2026-1337-4ace-8bad-deadfacebeef@karrar-pro-1042646830968.us-central1.run.app:443?path=%2FTelegram%2F%40KingsNet_Free%2F%40H_G_5W&security=tls&encryption=none&host=karrar-pro-1042646830968.us-central1.run.app&type=ws&sni=karrar-pro-1042646830968.us-central1.run.app#GCP%20Google%20Cloud%20%7C%20BY%20Karrar"
 
 # نص رسالة GCP بتنسيق HTML آمن
 GCP_MESSAGE_TEXT = f"""<code>{GCP_SERVER_LINK}</code>
